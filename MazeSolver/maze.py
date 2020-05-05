@@ -126,21 +126,27 @@ def a_star_search(maze:Maze):
             finished = True
         for d in directions:
             newNode = Node(node.x + d[0],node.y + d[1],True,node)
-            color = list(img[newNode.y,newNode.x])
-            if(color != MazeSettings.MAZE_WALL and newNode.x < maze.width and newNode.x > 0 and newNode.y < maze.height and newNode.y > 0 and visited[newNode.x][newNode.y] != 1):
-                newNode.setScore(maze.end)   
-                visited[node.x][node.y] = 1
-                img[newNode.y,newNode.x] = MazeSettings.VISITED_NODE_COLOR
-                if(len(queue) == 0):
-                    queue.append(newNode)
-                else:
-                    for q in queue:
-                        if(newNode.score <= q.score): #if things break mid search for back track it starts here
-                            queue.insert(queue.index(q),newNode)
-                            break
-                        else:
+            try:
+                if(newNode.x < maze.width and newNode.x > 0 and newNode.y < maze.height and newNode.y > 0 and visited[newNode.y][newNode.x] != 1):
+                    color = list(img[newNode.y,newNode.x])
+                    if(color != MazeSettings.MAZE_WALL):
+                        newNode.setScore(maze.end)   
+                        visited[node.y][node.x] = 1
+                        img[newNode.y,newNode.x] = MazeSettings.VISITED_NODE_COLOR
+                        if(len(queue) == 0):
                             queue.append(newNode)
-                            break;
+                        else:
+                            for q in queue:
+                                if(newNode.score <= q.score): #if things break mid search for back track it starts here
+                                    queue.insert(queue.index(q),newNode)
+                                    break
+                                else:
+                                    queue.append(newNode)
+                                    break;
+            except IndexError:
+                print("new node:", newNode)
+                print("maze: ", maze.width,maze.height)
+           
                 
 
             
@@ -152,7 +158,7 @@ def a_star_search(maze:Maze):
 
 
 
-img = cv2.imread('mazes/maze-3.jpg',cv2.IMREAD_GRAYSCALE)
+img = cv2.imread('mazes/maze-2.jpg',cv2.IMREAD_GRAYSCALE)
 _, img = cv2.threshold(img, 120, 255, cv2.THRESH_BINARY)
 img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
 
