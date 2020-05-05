@@ -162,7 +162,7 @@ def a_star_search(maze:Maze):
 
 
 
-img = cv2.imread('mazes/maze-2.jpg',cv2.IMREAD_GRAYSCALE)
+img = cv2.imread('mazes/maze-6.png',cv2.IMREAD_GRAYSCALE)
 _, img = cv2.threshold(img, 120, 255, cv2.THRESH_BINARY)
 img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
 
