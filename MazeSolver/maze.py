@@ -129,20 +129,24 @@ def a_star_search(maze:Maze):
             try:
                 if(newNode.x < maze.width and newNode.x > 0 and newNode.y < maze.height and newNode.y > 0 and visited[newNode.y][newNode.x] != 1):
                     color = list(img[newNode.y,newNode.x])
+                    visited[node.y][node.x] = 1
                     if(color != MazeSettings.MAZE_WALL):
                         newNode.setScore(maze.end)   
-                        visited[node.y][node.x] = 1
+                        
                         img[newNode.y,newNode.x] = MazeSettings.VISITED_NODE_COLOR
                         if(len(queue) == 0):
                             queue.append(newNode)
                         else:
-                            for q in queue:
-                                if(newNode.score <= q.score): #if things break mid search for back track it starts here
-                                    queue.insert(queue.index(q),newNode)
-                                    break
-                                else:
+                            inserted = False
+                            if(newNode not in queue):
+                                for q in queue:
+                                    if(newNode.score < q.score): #if things break mid search for back track it starts here
+                                        queue.insert(queue.index(q),newNode)
+                                        inserted = True
+                                        break
+                                if not inserted:
                                     queue.append(newNode)
-                                    break;
+                                    
             except IndexError:
                 print("new node:", newNode)
                 print("maze: ", maze.width,maze.height)
