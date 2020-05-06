@@ -1,15 +1,22 @@
 from maze import Maze, MazeSettings
 from node import Node
 import colorsys
+import sys
 
 
 class Search:
 
     def __init__(self, maze: Maze):
+        sys.setrecursionlimit(30000)
         self.maze = maze
         print("maze: ", maze.start, maze.end)
         self.queue = []
         self.directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+    def draw_path(self, node):
+        self.maze.img[node.y, node.x] = MazeSettings.START_NODE_COLOR
+        if(node.parent):
+            self.draw_path(node.parent)
 
     def a_star_search(self):
 
@@ -28,6 +35,8 @@ class Search:
             node = self.queue.pop(0)
             if(node == self.maze.end):
                 finished = True
+                self.draw_path(node)
+                break
             for d in self.directions:
                 newNode = Node(node.x + d[0], node.y + d[1], True, node)
                 try:
